@@ -91,6 +91,7 @@ spec:
       containers:
       - name: kavita
         image: lscr.io/linuxserver/kavita:latest
+        imagePullPolicy: Always #autoupdate to latest version
         ports:
         - containerPort: 5000
         envFrom:
