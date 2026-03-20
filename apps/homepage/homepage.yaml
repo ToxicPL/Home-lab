@@ -1,0 +1,83 @@
+# ---------------------------
+# PersistentVolume (PV)
+# ---------------------------
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: homepage-pv
+spec:
+  capacity:
+    storage: 4Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  hostPath:
+    path: /data/homepage/config   
+
+---
+# ---------------------------
+# PersistentVolumeClaim (PVC)
+# ---------------------------
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: homepage-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: manual
+  volumeName: homepage-pv
+  resources:
+    requests:
+      storage: 4Gi
+
+---
+# ---------------------------
+# Deployment Homepage
+# ---------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homepage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homepage
+  template:
+    metadata:
+      labels:
+        app: homepage
+    spec:
+      containers:
+        - name: homepage
+          image: ghcr.io/gethomepage/homepage:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: homepage-secrets 
+          volumeMounts:
+            - name: homepage-config
+              mountPath: /app/config
+      volumes:
+        - name: homepage-config
+          persistentVolumeClaim:
+            claimName: homepage-pvc
+
+---
+# ---------------------------
+# Service to expose Homepage
+# ---------------------------
+apiVersion: v1
+kind: Service
+metadata:
+  name: homepage
+spec:
+  selector:
+    app: homepage
+  ports:
+    - port: 3000
+      targetPort: 3000
+      nodePort: 31300
+  type: NodePort
