@@ -50,13 +50,13 @@ spec:
             httpGet:
               path: /health
               port: 9000
-            initialDelaySeconds: 10
+            initialDelaySeconds: 70
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
               port: 9000
-            initialDelaySeconds: 15
+            initialDelaySeconds: 75
             periodSeconds: 20
           env:
             - name: ALLOW_SIGNUP
