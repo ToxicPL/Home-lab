@@ -57,13 +57,13 @@ spec:
             httpGet:
               path: /health
               port: 3000
-            initialDelaySeconds: 10
+            initialDelaySeconds: 60
             periodSeconds: 10
           livenessProbe:
             httpGet:
               path: /health
               port: 3000
-            initialDelaySeconds: 15
+            initialDelaySeconds: 65
             periodSeconds: 20
           resources:
             requests:
