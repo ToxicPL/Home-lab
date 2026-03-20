@@ -106,7 +106,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: kavita-books-pvc
+  name: kavita-books-pvc-2
   annotations:
     volume.beta.kubernetes.io/storage-class: ""
 spec:
