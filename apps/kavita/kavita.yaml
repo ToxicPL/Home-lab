@@ -1,4 +1,46 @@
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kavita
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kavita
+  template:
+    metadata:
+      labels:
+        app: kavita
+    spec:
+      containers:
+      - name: kavita
+        image: lscr.io/linuxserver/kavita:latest
+        imagePullPolicy: Always #autoupdate to latest version
+        ports:
+        - containerPort: 5000
+        envFrom:
+        - secretRef:
+            name: kavita-secrets
+        volumeMounts:
+        - name: config
+          mountPath: /config
+        - name: data
+          mountPath: /data
+        - name: books
+          mountPath: /books
+          readOnly: true
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: kavita-config-pvc
+      - name: data
+        persistentVolumeClaim:
+          claimName: kavita-data-pvc
+      - name: books
+        persistentVolumeClaim:
+          claimName: kavita-books-pvc
+---
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -73,48 +115,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: kavita
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: kavita
-  template:
-    metadata:
-      labels:
-        app: kavita
-    spec:
-      containers:
-      - name: kavita
-        image: lscr.io/linuxserver/kavita:latest
-        imagePullPolicy: Always #autoupdate to latest version
-        ports:
-        - containerPort: 5000
-        envFrom:
-        - secretRef:
-            name: kavita-secrets
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        - name: data
-          mountPath: /data
-        - name: books
-          mountPath: /books
-          readOnly: true
-      volumes:
-      - name: config
-        persistentVolumeClaim:
-          claimName: kavita-config-pvc
-      - name: data
-        persistentVolumeClaim:
-          claimName: kavita-data-pvc
-      - name: books
-        persistentVolumeClaim:
-          claimName: kavita-books-pvc
+
 ---
 apiVersion: v1
 kind: Service
