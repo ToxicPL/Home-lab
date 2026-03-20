@@ -4,6 +4,8 @@ kind: Deployment
 metadata:
   name: kavita
 spec:
+  strategy:
+    type: RollingUpdate
   replicas: 1
   selector:
     matchLabels:

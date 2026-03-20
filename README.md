@@ -16,6 +16,7 @@ Name | What it is doing | Status |
 | :--- | :--- | :--- |
 | **Kavita** | Library of books etc. | ✅ |
 | **Mealie** | App for gathering your recipes  | ✅ |
+| **Homepage** | Basicly a homepage | 🚧 In Progress |
 | **Grafana** | Monitoring tool | 🚧 In Progress |
 | **N/A** | N/A | ❌  |
 

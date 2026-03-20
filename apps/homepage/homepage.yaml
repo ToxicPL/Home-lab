@@ -44,6 +44,8 @@ spec:
   selector:
     matchLabels:
       app: homepage
+    strategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -52,6 +54,7 @@ spec:
       containers:
         - name: homepage
           image: ghcr.io/gethomepage/homepage:latest
+          imagePullPolicy: Always #autoupdate to latest version
           ports:
             - containerPort: 3000
           envFrom:
