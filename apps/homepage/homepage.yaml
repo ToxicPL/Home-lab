@@ -55,6 +55,13 @@ spec:
         - name: homepage
           image: ghcr.io/gethomepage/homepage:latest
           imagePullPolicy: Always #autoupdate to latest version
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
           ports:
             - containerPort: 3000
           envFrom:
