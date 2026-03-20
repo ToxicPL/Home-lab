@@ -59,7 +59,9 @@ spec:
             - containerPort: 3000
           envFrom:
             - secretRef:
-                name: homepage-secrets 
+                name: homepage-secrets
+            - SecretRef:
+                name: kavita-secrets
           volumeMounts:
             - name: homepage-config
               mountPath: /app/config
