@@ -15,6 +15,7 @@ List of this apps bellow.
 Name | What it is doing | Status |
 | :--- | :--- | :--- |
 | **Kavita** | Library of books etc. | ✅ |
+| **Mealie** | App for gathering your recipes  | ✅ |
 | **Grafana** | Monitoring tool | 🚧 In Progress |
 | **N/A** | N/A | ❌  |
 
