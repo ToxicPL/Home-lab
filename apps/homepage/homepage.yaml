@@ -68,7 +68,7 @@ spec:
             - secretRef:
                 name: kavita-secrets
             - secretRef:
-                name: synology
+                name: synology-secrets
           volumeMounts:
             - name: homepage-config
               mountPath: /app/config
