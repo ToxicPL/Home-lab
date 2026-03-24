@@ -32,11 +32,25 @@ spec:
           readOnly: true
       volumes:
       - name: homepage-config-volume
-        configMap:
-          name: homepage-config
-          items:
-            - key: homepage-config.json
-              path: config.json
+    configMap:
+      name: homepage-config
+      items:
+        - key: kubernetes.yaml
+          path: kubernetes.yaml
+        - key: settings.yaml
+          path: settings.yaml
+        - key: custom.css
+          path: custom.css
+        - key: custom.js
+          path: custom.js
+        - key: bookmarks.yaml
+          path: bookmarks.yaml
+        - key: services.yaml
+          path: services.yaml
+        - key: widgets.yaml
+          path: widgets.yaml
+        - key: proxmox.yaml
+          path: proxmox.yaml
 
 ---
 apiVersion: v1
