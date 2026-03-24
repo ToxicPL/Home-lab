@@ -10,8 +10,8 @@ data:
     mode: cluster
   settings.yaml: |
     server:
-    allowedHosts:
-      - "192.168.100.14"
+      allowedHosts:
+        - "192.168.100.14"
   
   custom.css: ""
   custom.js: ""
