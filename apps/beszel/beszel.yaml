@@ -116,12 +116,6 @@ spec:
         env:
           - name: HUB_URL
             value: "http://192.168.100.14:30900"
-          - name: KEY
-            valueFrom:
-              secretKeyRef:
-                name: beszel-secret
-                key: KEY
-          - name: TOKEN
             valueFrom:
               secretKeyRef:
                 name: beszel-secret
