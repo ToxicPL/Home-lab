@@ -125,6 +125,22 @@ spec:
               secretKeyRef:
                 name: beszel-secret
                 key: TOKEN
+      securityContext:
+          privileged: true
+      volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: sys
+          mountPath: /host/sys
+          readOnly: true
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
       tolerations:
         - key: node-role.kubernetes.io/control-plane
           operator: Exists
