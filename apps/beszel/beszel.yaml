@@ -1,0 +1,131 @@
+# =========================
+# PVC
+# =========================
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: beszel-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+# =========================
+# DEPLOYMENT
+# =========================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: beszel
+  labels:
+    app: beszel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beszel
+  template:
+    metadata:
+      labels:
+        app: beszel
+    spec:
+      containers:
+      - name: beszel
+        image: henrygd/beszel:latest
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        env:
+          - name: HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: APP_URL
+            value: "http://$(HOST):30900"
+        ports:
+        - name: http
+          containerPort: 8090
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 15
+        volumeMounts:
+          - mountPath: /beszel_data
+            name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: beszel-data
+
+---
+# =========================
+# SERVICE (NODEPORT)
+# =========================
+apiVersion: v1
+kind: Service
+metadata:
+  name: beszel-svc
+spec:
+  selector:
+    app: beszel
+  ports:
+    - port: 80
+      targetPort: 8090
+      nodePort: 30900
+  type: NodePort
+
+---
+# =========================
+# AGENT (DaemonSet)
+# =========================
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: beszel-agent
+spec:
+  selector:
+    matchLabels:
+      app: beszel-agent
+  template:
+    metadata:
+      labels:
+        app: beszel-agent
+    spec:
+      containers:
+      - name: beszel-agent
+        image: henrygd/beszel-agent:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        env:
+          - name: HUB_URL
+            value: "http://192.168.100.14:30900"
+          - name: KEY
+            valueFrom:
+              secretKeyRef:
+                name: beszel-secret
+                key: KEY
+          - name: TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: beszel-secret
+                key: TOKEN
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
