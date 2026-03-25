@@ -128,6 +128,11 @@ spec:
               secretKeyRef:
                 name: beszel-secret
                 key: TOKEN
+          - name: KEY 
+            valueFrom:
+              secretKeyRef:
+                name: beszel-secret
+                key: KEY
       securityContext:
           privileged: true
       volumeMounts:
