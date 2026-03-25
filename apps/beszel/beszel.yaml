@@ -102,6 +102,7 @@ spec:
       labels:
         app: beszel-agent
     spec:
+      hostNetwork: true
       containers:
       - name: beszel-agent
         image: henrygd/beszel-agent:latest
