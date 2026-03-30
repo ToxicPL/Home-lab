@@ -49,7 +49,8 @@ spec:
               fieldRef:
                 fieldPath: status.hostIP
           - name: APP_URL
-            value: "http://$(HOST):30900"
+            #value: "http://$(HOST):30900"
+            value: "https://beszel.kacperjedynak.pl"
           - name: HOST
             valueFrom:
               fieldRef:
