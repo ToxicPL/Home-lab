@@ -133,7 +133,8 @@ spec:
             cpu: "200m"
         env:
           - name: HUB_URL
-            value: "http://192.168.100.14:30900"
+            #value: "http://192.168.100.14:30900"
+            value: "https://beszel.kacperjedynak.pl"
           - name: TOKEN
             valueFrom:
               secretKeyRef:
