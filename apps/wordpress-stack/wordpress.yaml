@@ -225,7 +225,7 @@ spec:
   selector:
     app: wordpress
   ports:
-    - port: 80
+    - port: 8080
       targetPort: 80
       name: http
 
@@ -253,6 +253,6 @@ spec:
   selector:
     app: phpmyadmin
   ports:
-    - port: 80
+    - port: 8081
       targetPort: 80
       name: http
