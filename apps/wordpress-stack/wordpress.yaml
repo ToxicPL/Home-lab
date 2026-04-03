@@ -91,16 +91,6 @@ spec:
             storage: 20Gi
 
 ---
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: wordpress-apache-config
-data:
-  servername.conf: |
-    ServerName localhost
-
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -143,9 +133,6 @@ spec:
           volumeMounts:
             - name: wordpress-data
               mountPath: /var/www/html
-            - name: apache-servername-config
-              mountPath: /etc/apache2/conf-enabled/servername.conf
-              subPath: servername.conf
           startupProbe:
             tcpSocket:
               port: 80
@@ -173,9 +160,6 @@ spec:
         - name: wordpress-data
           persistentVolumeClaim:
             claimName: wordpress-pvc
-        - name: apache-servername-config
-          configMap:
-            name: wordpress-apache-config
 
 ---
 apiVersion: apps/v1
