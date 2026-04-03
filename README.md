@@ -18,7 +18,7 @@ Name | What it is doing | Status |
 | **Mealie** | App for gathering your recipes  | ✅ |
 | **Beszel** | Monitoring Tool  | ✅ |
 | **Homepage** | Basicly a homepage | 🚧 TBD |
-  **Grafana** | CMS | 🚧 TBD |
+  **Wordpress + mariadb + phpmyadmin** | CMS+DB | 🚧 TBD |
 | **Grafana** | Monitoring tool | 🚧 TBD |
 | **N/A** | N/A | ❌  |
 
