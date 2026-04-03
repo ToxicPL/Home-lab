@@ -197,22 +197,7 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 2
             failureThreshold: 24
-          readinessProbe:
-            httpGet:
-              path: /wp-admin/install.php  
-              port: 80
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 3
-            failureThreshold: 6
-          livenessProbe:
-            httpGet:
-              path: /wp-admin/install.php  
-              port: 80
-            initialDelaySeconds: 30
-            periodSeconds: 20
-            timeoutSeconds: 3
-            failureThreshold: 6
+
 
 # Services
 ---
