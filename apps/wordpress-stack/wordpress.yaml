@@ -79,16 +79,16 @@ spec:
             periodSeconds: 20
             timeoutSeconds: 2
             failureThreshold: 6
-  volumeClaimTemplates:
-    - metadata:
-        name: mariadb-data
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        storageClassName: longhorn
-        resources:
-          requests:
-            storage: 20Gi
+      volumeClaimTemplates:
+        - metadata:
+            name: mariadb-data
+          spec:
+            accessModes:
+            - ReadWriteOnce
+            storageClassName: longhorn
+            resources:
+              requests:
+                storage: 20Gi
 
 ---
 apiVersion: apps/v1
@@ -105,6 +105,16 @@ spec:
       labels:
         app: wordpress
     spec:
+      # NOWY initContainer - usuwa ostrzeżenie Apache ServerName
+      initContainers:
+      - name: fix-apache-servername
+        image: busybox:1.36
+        command: ['sh', '-c']
+        args:
+        - echo "ServerName localhost" >> /etc/apache2/apache2.conf
+        volumeMounts:
+        - name: apache-config
+          mountPath: /etc/apache2
       containers:
         - name: wordpress
           image: wordpress:php8.2-apache
@@ -133,6 +143,8 @@ spec:
           volumeMounts:
             - name: wordpress-data
               mountPath: /var/www/html
+            - name: apache-config  # NOWE - shared z initContainer
+              mountPath: /etc/apache2
           startupProbe:
             tcpSocket:
               port: 80
@@ -160,6 +172,8 @@ spec:
         - name: wordpress-data
           persistentVolumeClaim:
             claimName: wordpress-pvc
+        - name: apache-config  # apache emptyDIr for initContainer to modify config without affecting main container's filesystem
+          emptyDir: {}
 
 ---
 apiVersion: apps/v1
