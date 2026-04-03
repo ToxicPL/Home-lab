@@ -18,8 +18,14 @@ Name | What it is doing | Status |
 | **Mealie** | App for gathering your recipes  | ✅ |
 | **Beszel** | Monitoring Tool  | ✅ |
 | **Homepage** | Basicly a homepage | 🚧 TBD |
+  **Grafana** | CMS | 🚧 TBD |
 | **Grafana** | Monitoring tool | 🚧 TBD |
 | **N/A** | N/A | ❌  |
+
+## Specs of the homelab
+    - Main Server: Fujitsu Esprimo Q957
+    - Worker Node: Fujitsu Esprimo Q957
+
 
 ## 👋Contact 
 
