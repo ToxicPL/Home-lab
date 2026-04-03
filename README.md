@@ -23,8 +23,8 @@ Name | What it is doing | Status |
 | **N/A** | N/A | ❌  |
 
 ## Specs of the homelab
-    - Main Server: Fujitsu Esprimo Q957
-    - Worker Node: Fujitsu Esprimo Q957
+ - Main Server: Fujitsu Esprimo Q957
+ - Worker Node: Fujitsu Esprimo Q957
 
 
 ## 👋Contact 
