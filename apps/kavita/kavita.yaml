@@ -141,10 +141,10 @@ kind: Service
 metadata:
   name: kavita
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: kavita
   ports:
     - port: 5000
       targetPort: 5000
-      name: kavita
+      nodePort: 30500
