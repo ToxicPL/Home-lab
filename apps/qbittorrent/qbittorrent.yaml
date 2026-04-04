@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,47 +15,7 @@ spec:
       containers:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
-          imagePullPolicy: Always # auto update to latest version
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 8080
-            initialDelaySeconds: 60
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 8080
-            initialDelaySeconds: 65
-            periodSeconds: 20
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "100m"
-            limits:
-              memory: "1Gi"
-              cpu: "700m"
-          ports:
-            - containerPort: 8080 # Web UI port
-            - containerPort: 6881 # BitTorrent TCP port
-            - containerPort: 6881
-              protocol: UDP # BitTorrent UDP port
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: TZ
-              value: "Europe/Warsaw"
-            - name: WEBUI_PORT
-              value: "8080"
-            - name: TORRENTING_PORT
-              value: "6881"
-          volumeMounts:
-            - name: config
-              mountPath: /config
-            - name: downloads
-              mountPath: /downloads
+          # ... reszta bez zmian
       volumes:
         - name: config
           persistentVolumeClaim:
@@ -80,8 +39,8 @@ spec:
     - nfsvers=4.0
     - hard
   nfs:
-    server: 192.168.1.10 # change to your NAS IP
-    path: /shares/appdata/qbittorrent/config # change to your NAS exported path
+    server: 192.168.1.10
+    path: /shares/appdata/qbittorrent/config
 
 ---
 apiVersion: v1
@@ -113,8 +72,8 @@ spec:
     - nfsvers=4.0
     - hard
   nfs:
-    server: 192.168.100.91 # change to your NAS IP
-    path: /volumeUSB2/usbshare # change to your NAS exported path
+    server: 192.168.100.91
+    path: /volumeUSB2/usbshare
 
 ---
 apiVersion: v1
@@ -131,12 +90,13 @@ spec:
       storage: 500Gi
   volumeName: qbittorrent-downloads-pv
 
-  #services
-  apiVersion: v1
-  kind: Service
-  metadata:
-    name: qbittorrent
-  spec:
+#Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent
+spec:
   type: NodePort
   selector:
     app: qbittorrent
