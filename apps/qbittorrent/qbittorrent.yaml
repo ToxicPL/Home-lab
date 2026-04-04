@@ -146,7 +146,7 @@ spec:
     - name: webui
       port: 8080
       targetPort: 8080
-      nodePort: 8080
+      nodePort: 8010
       protocol: TCP
     - name: bittorrent-tcp
       port: 6881
