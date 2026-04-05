@@ -14,51 +14,51 @@ spec:
         app: kavita
     spec:
       containers:
-      - name: kavita
-        image: lscr.io/linuxserver/kavita:latest
-        imagePullPolicy: Always #autoupdate to latest version
-        readinessProbe:
+        - name: kavita
+          image: lscr.io/linuxserver/kavita:latest
+          imagePullPolicy: Always #autoupdate to latest version
+          readinessProbe:
             httpGet:
               path: /health
               port: 5000
             initialDelaySeconds: 60
             periodSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 5000
-          initialDelaySeconds: 65
-          periodSeconds: 20
-        resources:
-          requests:
-            memory: "500Mi"
-            cpu: "100m"
-          limits:
-            memory: "1Gi"
-            cpu: "700m"
-        ports:
-        - containerPort: 5000
-        envFrom:
-        - secretRef:
-            name: kavita-secrets
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        - name: data
-          mountPath: /data
-        - name: books
-          mountPath: /books
-          readOnly: true
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 65
+            periodSeconds: 20
+          resources:
+            requests:
+              memory: "500Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "700m"
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - secretRef:
+                name: kavita-secrets
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: data
+              mountPath: /data
+            - name: books
+              mountPath: /books
+              readOnly: true
       volumes:
-      - name: config
-        persistentVolumeClaim:
-          claimName: kavita-config-pvc
-      - name: data
-        persistentVolumeClaim:
-          claimName: kavita-data-pvc
-      - name: books
-        persistentVolumeClaim:
-          claimName: kavita-books-pvc-2
+        - name: config
+          persistentVolumeClaim:
+            claimName: kavita-config-pvc
+        - name: data
+          persistentVolumeClaim:
+            claimName: kavita-data-pvc
+        - name: books
+          persistentVolumeClaim:
+            claimName: kavita-books-pvc-2
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -76,11 +76,10 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: kavita-config-pvc
-  annotations:
-    volume.beta.kubernetes.io/storage-class: ""
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: longhorn
   resources:
     requests:
       storage: 2Gi
@@ -90,12 +89,11 @@ kind: PersistentVolume
 metadata:
   name: kavita-data-pv
 spec:
-  capacity:
-    storage: 5Gi
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: /data/kavita/data
+  resources:
+    requests:
+      storage: 5Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -120,7 +118,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: /mnt/NAS/home-lab/data/kavita_books   # NAS MNT
+    path: /mnt/NAS/home-lab/data/kavita_books # NAS MNT
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

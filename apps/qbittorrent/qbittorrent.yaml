@@ -67,36 +67,16 @@ spec:
 
 ---
 apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: qbittorrent-config-pv
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  mountOptions:
-    - nfsvers=4.0
-    - hard
-  nfs:
-    server: 192.168.100.91
-    path: /volumeUSB2/usbshare
-
----
-apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: qbittorrent-config-pvc
-  annotations:
-    volume.beta.kubernetes.io/storage-class: ""
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: longhorn
   resources:
     requests:
       storage: 5Gi
-  volumeName: qbittorrent-config-pv
 
 ---
 apiVersion: v1
