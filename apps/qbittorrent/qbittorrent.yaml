@@ -1,7 +1,96 @@
+---
+# WAVE -5: ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbittorrent-config
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+data:
+  qbittorrent.conf: |
+    [BitTorrent]
+    Session\AddTorrentStopped=false
+    Session\Port=6881
+    Session\QueueingSystemEnabled=true
+    Session\SSL\Port=41125
+    Session\ShareLimitAction=Stop
+
+    [Meta]
+    MigrationVersion=8
+
+    [Network]
+    Proxy\HostnameLookupEnabled=false
+    Proxy\Profiles\BitTorrent=true
+    Proxy\Profiles\Misc=true
+    Proxy\Profiles\RSS=true
+
+    [Preferences]
+    WebUI\BypassAuthentication=true
+    WebUI\CSRFProtection=false
+    WebUI\HostHeaderValidation=false
+    WebUI\TrustedInterfaces=0.0.0.0/0
+    WebUI\Port=8080
+
+---
+# WAVE -5: Storage (PVC/PV)
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qbittorrent-config-pvc
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: qbittorrent-downloads-pv
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+spec:
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+    - nfsvers=4.0
+    - hard
+  nfs:
+    server: 192.168.100.91
+    path: /volumeUSB2/usbshare
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qbittorrent-downloads-pvc
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+    volume.beta.kubernetes.io/storage-class: ""
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Gi
+  volumeName: qbittorrent-downloads-pv
+
+---
+# WAVE 5: Deployment + Service
 apiVersion: v1
 kind: Service
 metadata:
   name: qbittorrent
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   type: NodePort
   selector:
@@ -22,11 +111,14 @@ spec:
       targetPort: 6881
       nodePort: 30682
       protocol: UDP
+
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: qbittorrent
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   replicas: 1
   selector:
@@ -46,8 +138,9 @@ spec:
           args:
             - |
               echo "Injecting qBittorrent config..."
+              mkdir -p /config/qBittorrent
               cp /tmp/qbittorrent.conf /config/qBittorrent/qBittorrent.conf
-              chown 1000:1000 /config/qBittorrent/qBittorrent.conf
+              chown 1000:1000 /config/qBittorrent /config/qBittorrent/qBittorrent.conf
               chmod 644 /config/qBittorrent/qBittorrent.conf
               echo "Config injected successfully"
           volumeMounts:
