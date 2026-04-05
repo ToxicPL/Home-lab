@@ -22,7 +22,7 @@ data:
     Proxy\Profiles\Misc=true
     Proxy\Profiles\RSS=true
     [Preferences]
-    WebUI\BypassAuthentication=true
+    WebUI\BypassAuthentication=false
     WebUI\CSRFProtection=false
     WebUI\HostHeaderValidation=false
     WebUI\TrustedInterfaces=0.0.0.0/0
@@ -134,10 +134,10 @@ spec:
           args:
             - |
               mkdir -p /config/qBittorrent
-                  if [ ! -f /config/qBittorrent/qBittorrent.conf ]; then
-                    cp /tmp/qbittorrent.conf /config/qBittorrent/qBittorrent.conf
-                    chown -R 1000:1000 /config/qBittorrent
-                    chmod 644 /config/qBittorrent/qBittorrent.conf
+              if [ ! -f /config/qBittorrent/qBittorrent.conf ]; then
+                cp /tmp/qbittorrent.conf /config/qBittorrent/qBittorrent.conf
+                chown -R 1000:1000 /config/qBittorrent
+                chmod 644 /config/qBittorrent/qBittorrent.conf
               fi
               rm -f /config/qBittorrent/qBittorrent-data.conf
           volumeMounts:
