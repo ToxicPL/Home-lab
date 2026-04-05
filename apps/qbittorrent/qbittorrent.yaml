@@ -57,8 +57,6 @@ spec:
               if [ ! -f /config/qBittorrent/qBittorrent.conf ]; then
                 cp /seed/qBittorrent.conf /config/qBittorrent/qBittorrent.conf
               fi
-              sed -i '/^WebUI\\Password/d' /config/qBittorrent/qBittorrent.conf || true
-              sed -i '/^WebUI\\Username/d' /config/qBittorrent/qBittorrent.conf || true
               chown -R 1000:1000 /config
               chmod 664 /config/qBittorrent/qBittorrent.conf || true
               rm -f /config/qBittorrent/qBittorrent-data.conf
@@ -82,7 +80,7 @@ spec:
             - name: WEBUI_PORT
               value: "8080"
             - name: TORRENTING_PORT
-              value: "30000"
+              value: "44344"
             - name: UMASK
               value: "002"
           ports:
