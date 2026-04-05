@@ -149,6 +149,8 @@ spec:
         - name: qbittorrent
           image: lscr.io/linuxserver/qbittorrent:latest
           imagePullPolicy: Always
+          args:
+            - --profile=/config/qBittorrent
           resources:
             requests:
               memory: "512Mi"
@@ -175,6 +177,8 @@ spec:
               value: "6881"
             - name: UMASK
               value: "002"
+            - name: CONFIG_DIR
+              value: "/config/qBittorrent"
           volumeMounts:
             - name: config
               mountPath: /config
