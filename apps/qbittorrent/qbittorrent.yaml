@@ -12,7 +12,7 @@ data:
     Session\AddTorrentStopped=false
     Session\Port=30681
     Session\QueueingSystemEnabled=true
-    Session\SSL\Port=30681
+    Session\SSL\Port=30682
     Session\ShareLimitAction=Stop
     [Meta]
     MigrationVersion=8
@@ -99,12 +99,12 @@ spec:
       protocol: TCP
     - name: bittorrent-tcp
       port: 6881
-      targetPort: 6881
+      targetPort: 30681
       nodePort: 30681
       protocol: TCP
     - name: bittorrent-udp
       port: 6881
-      targetPort: 6881
+      targetPort: 30682
       nodePort: 30682
       protocol: UDP
 
@@ -158,9 +158,9 @@ spec:
               cpu: "700m"
           ports:
             - containerPort: 8080
-            - containerPort: 6881
+            - containerPort: 30681
               protocol: TCP
-            - containerPort: 6881
+            - containerPort: 30682
               protocol: UDP
           env:
             - name: PUID
