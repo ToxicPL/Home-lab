@@ -62,4 +62,6 @@ spec:
     app: ollama
   ports:
     - port: 11434
-      targetPort: 11434
+      targetPort: 30500
+      nodePort: 30501
+  type: NodePort
