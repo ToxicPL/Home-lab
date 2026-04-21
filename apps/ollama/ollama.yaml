@@ -37,7 +37,7 @@ spec:
           resources:
             requests:
               cpu: "1"
-              memory: "4Gi"
+              memory: "2Gi"
             limits:
               cpu: "2"
               memory: "8Gi"
@@ -51,11 +51,14 @@ kind: Service
 metadata:
   name: ollama
 spec:
+  type: NodePort
+  externalTrafficPolicy: Local
   selector:
     app: ollama
   ports:
     - port: 11434
       targetPort: 11434
+      nodePort: 30501
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -99,6 +102,7 @@ metadata:
   name: open-webui
 spec:
   type: NodePort
+  externalTrafficPolicy: Local
   selector:
     app: open-webui
   ports:
