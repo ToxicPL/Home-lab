@@ -8,6 +8,17 @@ spec:
   resources:
     requests:
       storage: 20Gi
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: open-webui-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -95,7 +106,8 @@ spec:
               memory: "1Gi"
       volumes:
         - name: data
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: open-webui-pvc
 ---
 apiVersion: v1
 kind: Service
